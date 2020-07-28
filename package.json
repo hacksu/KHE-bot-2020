@@ -1,0 +1,22 @@
+{
+  "name": "khe-bot-2020",
+  "version": "1.0.0",
+  "description": "A bot to use through Discord to assist hackers during the KHE 2020 Virtual Hackathon",
+  "main": "khe.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hacksu/KHE-bot-2020.git"
+  },
+  "author": "Chris Seitz & Katie Cochran",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hacksu/KHE-bot-2020/issues"
+  },
+  "homepage": "https://github.com/hacksu/KHE-bot-2020#readme",
+  "dependencies": {
+    "discord.js": "^12.2.0"
+  }
+}
