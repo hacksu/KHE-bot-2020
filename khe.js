@@ -1,6 +1,8 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const { token } = require("./config.json");
+global.client = client;
+
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -20,7 +22,7 @@ client.on('message', message => {
         message.reply('pong');
     }
 
-    if (command === '/guild') {
+    if (command === '/zone') {
       (async () => {
         let name = message.content.split(' ')[1];
         let category = await message.guild.channels.create(name, {
@@ -42,7 +44,7 @@ client.on('message', message => {
     if (command === '/help') {
       message.reply(`KHE Commands: 
                  /ping - bot responds with pong 
-                 /guild - creates a guild with a text and voice channel based on a given name`);
+                 /zone - creates a category with a text and voice channel based on a given name`);
     }
 
   }
