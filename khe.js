@@ -24,7 +24,7 @@ client.on('message', message => {
 
     if (command === '/zone') {
       (async () => {
-        let name = message.content.split(' ')[1];
+        let name = message.content.split(command)[1];
         let category = await message.guild.channels.create(name, {
           type: 'category',
           permissionOverwrites: [{
@@ -37,7 +37,7 @@ client.on('message', message => {
         let voiceChannel = await message.guild.channels.create(name, { type: 'voice', });
         await textChannel.setParent(category.id);
         await voiceChannel.setParent(category.id);
-        message.reply('Channels Created');
+        message.reply("'" + name + "'" + ' channels have been created. If you do not see them on the left, please contact a Hacksu Staff member or a Hacksu Leader for assistance.');
       })();
     }
 
