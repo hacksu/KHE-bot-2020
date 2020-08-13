@@ -1,0 +1,6 @@
+[
+"Thank you Schmoogle, for sponsoring this event!",
+"Thank you Statewide, for sponsoring this event!",
+"Thank you Bill, for sponsoring this event!",
+"A big shoutout to Dennis, for sponsoring this event!"
+]
