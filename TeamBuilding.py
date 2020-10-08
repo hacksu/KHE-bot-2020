@@ -10,9 +10,9 @@ class MyClient(discord.Client):
     #ON MESSAGE
     async def on_message(self,message):
         if(message.content.startswith("/")):
-            if(message.content.split()[0] == "/build_team"):
+            if(message.content.split()[0] == "/team_build"):
                 await self.add_user_to_team_building(message)
-            elif(message.content.split()[0] == "/sort"):
+            elif(message.content.split()[0] == "/sort" and message.author.guild_permissions.administrator):
                 await self.sort(message)
 
 
@@ -20,7 +20,6 @@ class MyClient(discord.Client):
     async def process_commands(self,message):
         command = message.content.split()[0].lower()
         #Command List Here
-        print(command == "/sort")
         if(command == "/build_team"):
             await self.add_user_to_team_building(message)
         elif(command == "/sort"):
@@ -40,22 +39,25 @@ class MyClient(discord.Client):
 ##                        connections[x][y] += 1
 ##        print(connections)
 ##        group_num = len(self.people) // TEAM_SIZE
+        if(len(self.people) < TEAM_SIZE):
+            print("Not enough people!")
         for x in self.people:
             for item in self.people[x]:
                 if item not in connections:
                     connections[item] = [x]
                 else:
                     connections[item].append(x)
-        print(connections)
-        if(len(self.people) % TEAM_SIZE == 0):
+        #print(connections)
+        if((len(self.people) % TEAM_SIZE) == 0):
             group_num = len(self.people) // TEAM_SIZE
         else:
-            group_num = (len(self.people) // TEAM_SIZE) - 1
+            group_num = (len(self.people) // TEAM_SIZE) + 1
         groups = []
+        #print("GROUP NUM:",group_num)
         while(len(groups) < group_num):
             groups.append([])
             while(len(groups[-1]) != TEAM_SIZE):
-                print(connections)
+                #print(connections)
                 maxGroup = connections[max(connections, key=lambda group: len(connections[group]))]
                 #print("max",maxGroup)
                 if(len(maxGroup) == 0):
@@ -67,9 +69,11 @@ class MyClient(discord.Client):
         #print(groups)
         msg = "The made teams are:```\n"
         cnt = 1
+        #print("LEN GROUPS:",len(groups))
         for team in groups:
             msg += "Team " + str(cnt) + "\n"
             for user in team:
+                print("ADDING",str(user),"TO TEAM",cnt)
                 msg += "\t" + str(user) + " :: " + str(self.people[user]) + "\n"
             cnt += 1
         msg += "```"
@@ -83,11 +87,13 @@ class MyClient(discord.Client):
 
 
     async def add_user_to_team_building(self,message):
+        if(message.channel.id != 763834614183362591 and message.channel.id != 763838177189560351):
+            return
         if(message.author.id in self.people):
             await message.channel.send("You are already registered for Team Building!")
             return
         try:
-            await message.author.send("Hello! In order to join the Team Building Activity, I need at least 1 and at most 5 technologies or skills that you have, so I can attempt to match you with similarly skilled people! Send at most 5 different words or phrases, and I'll register you! (If you don't want to do 5 things, type `done` to end early)")
+            await message.author.send("Hello! In order to join the Team Building Activity, I need at least 1 and at most 5 technologies or skills that you have, so I can attempt to match you with similarly skilled people! Send at most 5 different words or phrases, and I'll register you! PLEASE send each term 1 at a time, i.e., do not say \"python, java\". (If you don't want to do 5 things, type `done` to end early)")
             await message.channel.send(message.author.mention + " check your DM's for further instructions!")
         except discord.errors.Forbidden:
             await message.channel.send(message.author.mention + " I need to be able to DM you to add you to the Team Building Activity. Please right click on the server icon, select \"Privacy Settings\", and check the \"Allow direct messages from server members\"")
@@ -101,7 +107,7 @@ class MyClient(discord.Client):
             except asyncio.TimeoutError:
                 await message.author.send("Sorry, you took too long! If you still want to register, start the process again.")
                 return
-            if(respons.content == "done"):
+            if(respons.content.lower() == "done"):
                 break
             else:
                 terms.append(respons.content.lower())
@@ -123,7 +129,7 @@ class MyClient(discord.Client):
         command = message.content.split()
    
     async def on_ready(self): #This command will be called whenever the bot is first created and is ready to recieve input. This is different from being connected to Discord's servers.
-        await self.change_presence(activity=discord.Game(name="/build_team"))
+        #await self.change_presence(activity=discord.Game(name="/build_team"))
         file = open("data/team_building_storage.txt",'r')
         self.people = eval(file.read())
         file.close()

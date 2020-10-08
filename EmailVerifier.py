@@ -14,9 +14,9 @@ class MyClient(discord.Client):
     #ON MESSAGE
     async def on_message(self,message):
         global EMAILS
-        if(message.channel.id == 751154150871531701):
+        if(message.channel.id == 760667653429526549):
             if(message.content == "/verify"):
-                if(message.guild.get_role(751154695602569317) in message.author.roles):
+                if(message.guild.get_role(760668537517244468) in message.author.roles):
                     await message.delete(delay=1.0)
                     return
                 try:
@@ -41,7 +41,7 @@ class MyClient(discord.Client):
                     await message.author.send("We're sorry, that email has already been used to join the Server. If you believe this is a mistake, please contact KHE Staff.")
                 elif(verify['valid']):
                     await message.author.send("Success! Welcome to KHE 2020!")
-                    await message.author.add_roles(message.guild.get_role(751154695602569317),atomic=True)
+                    await message.author.add_roles(message.guild.get_role(760668537517244468),atomic=True)
                     EMAILS[verify['email']] = message.author.id
                     file = open("data/emails.txt",'a')
                     file.write("'"+verify['email']+"':"+str(message.author.id)+",\n")
@@ -50,14 +50,6 @@ class MyClient(discord.Client):
                     await message.author.send("Apologies, but we do not have that email in our system. If you entered the email in wrong, please return to the KHE Discord and use `/verify` again. If you believe I have made a mistake, please contact KHE Staff.")
             elif(message.author.id != 737741291944673402):
                 await message.delete(delay=1.0)
-            
-    #ON MEMBER JOIN
-    #async def on_member_join(self,member):
-    #    try:
-    #        await member.send("Test")
-
-    #ON REACTION ADD
-    #async 
 
 
     #PROCESS COMMANDS
