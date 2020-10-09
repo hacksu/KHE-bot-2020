@@ -77,12 +77,22 @@ class MyClient(discord.Client):
                 msg += "\t" + str(user) + " :: " + str(self.people[user]) + "\n"
             cnt += 1
         msg += "```"
-        await message.channel.send(msg)
+        #await message.channel.send(msg)
             
         
         
 
-        
+    def swapString(string):
+        if(string == "py"):
+            string = "python"
+        elif(string == "cpp"):
+            string = "c++"
+        elif(string == "csharp"):
+            string = "c#"
+        elif(string == "js"):
+            string = "javascript"
+
+        return string
 
 
 
@@ -93,7 +103,7 @@ class MyClient(discord.Client):
             await message.channel.send("You are already registered for Team Building!")
             return
         try:
-            await message.author.send("Hello! In order to join the Team Building Activity, I need at least 1 and at most 5 technologies or skills that you have, so I can attempt to match you with similarly skilled people! Send at most 5 different words or phrases, and I'll register you! PLEASE send each term 1 at a time, i.e., do not say \"python, java\". (If you don't want to do 5 things, type `done` to end early)")
+            await message.author.send("Hello! In order to join the Team Building Activity, I need at least 1 and at most 5 technologies or skills that you have, so I can attempt to match you with similarly skilled people! Send at most 5 different words or phrases, and I'll register you! PLEASE send each term 1 at a time, i.e., do not say \"python, java\", do \"python\" and then \"java\". (If you don't want to do 5 things, type `done` to end early)")
             await message.channel.send(message.author.mention + " check your DM's for further instructions!")
         except discord.errors.Forbidden:
             await message.channel.send(message.author.mention + " I need to be able to DM you to add you to the Team Building Activity. Please right click on the server icon, select \"Privacy Settings\", and check the \"Allow direct messages from server members\"")
@@ -110,7 +120,7 @@ class MyClient(discord.Client):
             if(respons.content.lower() == "done"):
                 break
             else:
-                terms.append(respons.content.lower())
+                terms.append(swapString(respons.content.lower()))
                 await message.author.send("`"+respons.content.lower()+"` added. "+str(4-x)+" left!")
         if(x == 0):
             await message.author.send("I need at least 1 term! It can be something minor! Please start the process over.")
