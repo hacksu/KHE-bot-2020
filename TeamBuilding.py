@@ -3,6 +3,18 @@ import asyncio
 from datetime import *
 import random
 
+def swapString(string):
+        if(string == "py"):
+            string = "python"
+        elif(string == "cpp"):
+            string = "c++"
+        elif(string == "csharp"):
+            string = "c#"
+        elif(string == "js"):
+            string = "javascript"
+
+        return string
+
 
 class MyClient(discord.Client):
 
@@ -10,9 +22,9 @@ class MyClient(discord.Client):
     #ON MESSAGE
     async def on_message(self,message):
         if(message.content.startswith("/")):
-            if(message.content.split()[0] == "/team_build"):
+            if(message.content.split()[0] == "/team_build" and message.channel.id == 763834614183362591):
                 await self.add_user_to_team_building(message)
-            elif(message.content.split()[0] == "/sort" and message.author.guild_permissions.administrator):
+            elif(message.content.split()[0] == "/sort" and message.author.guild_permissions.administrator and message.channel.id == 763838177189560351):
                 await self.sort(message)
 
 
@@ -68,31 +80,42 @@ class MyClient(discord.Client):
                         connections[group].remove(groups[-1][-1])
         #print(groups)
         msg = "The made teams are:```\n"
-        cnt = 1
+        #cnt = 1
         #print("LEN GROUPS:",len(groups))
+        teams_cat = self.get_channel(763785871278211082)
         for team in groups:
-            msg += "Team " + str(cnt) + "\n"
+            send = ""
+            team_num = 0
+            for channel in teams_cat.text_channels:
+                team_num = int(channel.name.split("-")[1].replace("team ",""))
+            team_num += 1
+            print("Creating Team",team_num)
+            text = {
+                self.khe.get_role(755076622100463676):discord.PermissionOverwrite(send_messages=False,view_channel=True), #Staff
+                self.khe.get_role(755074904155488296):discord.PermissionOverwrite(view_channel=False), #Everyone
+                }
+            voice = {
+                self.khe.get_role(755076622100463676):discord.PermissionOverwrite(view_channel=True,connect=False), #Staff
+                self.khe.get_role(755074904155488296):discord.PermissionOverwrite(view_channel=False) #Everyone
+            }
+            send += "Team " + str(team_num) + "\n"
             for user in team:
-                print("ADDING",str(user),"TO TEAM",cnt)
-                msg += "\t" + str(user) + " :: " + str(self.people[user]) + "\n"
-            cnt += 1
+                text[self.khe.get_member(user)] = discord.PermissionOverwrite(view_channel=True,send_messages=True,manage_messages=True)
+                voice[self.khe.get_member(user)] = discord.PermissionOverwrite(view_channel=True)
+                print("ADDING",str(user),"TO TEAM",team_num)
+                send += "\t" + str(self.khe.get_member(user).mention) + " :: " + str(self.people[user]) + "\n"
+            send += "These are the skills you all provided for Team Building. Get to know each other!"
+            created = await self.khe.create_text_channel("team-"+str(team_num),category=teams_cat,overwrites=text)
+            await self.khe.create_voice_channel("Team "+str(team_num),category=teams_cat,overwrites=text)
+            await created.send(send)
+            msg += send.replace("These are the skills you all provided for Team Building. Get to know each other!","")
         msg += "```"
-        #await message.channel.send(msg)
+        await message.channel.send(msg)
             
         
         
 
-    def swapString(string):
-        if(string == "py"):
-            string = "python"
-        elif(string == "cpp"):
-            string = "c++"
-        elif(string == "csharp"):
-            string = "c#"
-        elif(string == "js"):
-            string = "javascript"
-
-        return string
+    
 
 
 
@@ -143,6 +166,7 @@ class MyClient(discord.Client):
         file = open("data/team_building_storage.txt",'r')
         self.people = eval(file.read())
         file.close()
+        self.khe = self.get_guild(755074904155488296)
 
     #CONNECTION
     async def on_connect(self):

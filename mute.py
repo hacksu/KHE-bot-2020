@@ -3,7 +3,7 @@ import asyncio
 
 muteCommand = "/mute"
 unMuteCommand = "/unmute"
-authRoles = ["Admin"]
+authRoles = ["Organizer","Sponsor","Staff"]
 
 def isAuth(roles):
     for role in roles:
@@ -14,6 +14,8 @@ def isAuth(roles):
 class MyClient(discord.Client):
 
     async def on_message(self, message):
+        if(message.channel.id not in [763838177189560351,767930560433356800]):
+            return
         command = message.content.split()
         if command[0] == muteCommand and isAuth(message.author.roles) and len(command) == 1:
             for member in message.author.voice.channel.members:

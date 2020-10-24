@@ -1,14 +1,1 @@
-{
-344132856685002764: ['python', 'bot', 'c++', 'gaming', 'gui'], 
-691755967607734324: ['python', 'c++'], 
-743937279822921800: ['javascript', 'machine learning', 'data'], 
-206108019287654400: ['vs code', 'sublime', 'javaScript', 'python', 'angular'], 
-168103831480041473: ['flintknap', 'history buff', 'civ egypt enthusiast', 'foodie'], 
-188507570493849600: ['c++', 'c#', 'arduino', 'python'], 
-123: ['python', 'arduino', 'bot'], 
-987: ['angular', 'sublime', 'c++'], 
-69: ['mongo'], 
-420: ['vs code'], 
-201091102399266816: ['java', 'c++'], 
-547556671090589696: ['node', 'html', 'mongo']
-}
+{}
